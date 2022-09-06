@@ -1,7 +1,7 @@
 version: "3"
 services:
     frontend:
-        container_name: frontend
+        container_name: todolist-frontend
         build:
             context: ./frontend
             dockerfile: Dockerfile
@@ -13,7 +13,7 @@ services:
         networks:
             - nestjs-networks
     backend:
-        container_name: backend
+        container_name: todolist-backend
         build:
             context: ./backend
             dockerfile: Dockerfile
@@ -28,7 +28,7 @@ services:
             - nestjs-networks
     mongodb:
         image: mongo:latest
-        container_name: mongodb
+        container_name: todolist-mongodb
         restart: always
         environment:
             MONGO_INITDB_ROOT_USERNAME: admin
