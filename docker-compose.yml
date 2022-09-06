@@ -1,0 +1,46 @@
+version: "3"
+services:
+    frontend:
+        container_name: frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        image: client
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./frontend:/app
+        networks:
+            - nestjs-networks
+    backend:
+        container_name: backend
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        image: server
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./backend:/app
+        depends_on:
+            - mongodb
+        networks:
+            - nestjs-networks
+    mongodb:
+        image: mongo:latest
+        container_name: mongodb
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: 123456
+            MONGO_INITDB_DATABASE: todolist
+        ports:
+            - 27017:27017
+        volumes:
+            - ./database:/data/db
+            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+        networks:
+            - nestjs-networks
+networks:
+    nestjs-networks:
+        driver: bridge
